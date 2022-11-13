@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CheatTable CheatEngineTableVersion="42">
+  <CheatEntries>
+    <CheatEntry>
+      <ID>26</ID>
+      <Description>"Hepsini Aç -ps_login.exe"</Description>
+      <Options moActivateChildrenAsWell="1" moDeactivateChildrenAsWell="1"/>
+      <LastState Value="" RealAddress="00000000"/>
+      <GroupHeader>1</GroupHeader>
+      <CheatEntries>
+        <CheatEntry>
+          <ID>25</ID>
+          <Description>"password rewrite"</Description>
+          <LastState/>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>[ENABLE]
+//code from here to '[DISABLE]' will be used to enable the cheat
+alloc(newmem,2048)
+label(returnhere)
+label(originalcode)
+label(exit)
+
+newmem: //this is allocated memory, you have read,write,execute access
+//place your code here
+mov cl,[eax]
+cmp cl,30
+jge originalcode
+cmp cl,'*'
+je originalcode
+cmp cl,'+'
+je originalcode
+cmp cl,'.'
+je originalcode
+cmp cl,'/'
+je originalcode
+cmp cl,0
+je originalcode
+mov cl,30
+originalcode:
+
+mov [edx+eax],cl
+
+exit:
+jmp returnhere
+
+"ps_login.exe"+4510:
+jmp newmem
+returnhere:
+
+
+ 
+ 
+[DISABLE]
+//code from here till the end of the code will be used to disable the cheat
+dealloc(newmem)
+"ps_login.exe"+4510:
+mov cl,[eax]
+mov [edx+eax],cl
+//Alt: db 8A 08 88 0C 02
+</AssemblerScript>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>24</ID>
+          <Description>"userid rewrite"</Description>
+          <LastState/>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>[ENABLE]
+//code from here to '[DISABLE]' will be used to enable the cheat
+alloc(newmem,2048)
+label(returnhere)
+label(originalcode)
+label(exit)
+
+newmem: //this is allocated memory, you have read,write,execute access
+//place your code here
+mov cl,[eax]
+cmp cl,30
+jge originalcode
+cmp cl,0
+je originalcode
+mov cl,30
+originalcode:
+
+mov [edx+eax],cl
+
+exit:
+jmp returnhere
+
+"ps_login.exe"+44F4:
+jmp newmem
+returnhere:
+
+
+ 
+ 
+[DISABLE]
+//code from here till the end of the code will be used to disable the cheat
+dealloc(newmem)
+"ps_login.exe"+44F4:
+mov cl,[eax]
+mov [edx+eax],cl
+//Alt: db 8A 08 88 0C 02
+</AssemblerScript>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>21</ID>
+          <Description>"PS_Login FLOOD FIX"</Description>
+          <LastState/>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>[ENABLE]
+//code from here to '[DISABLE]' will be used to enable the cheat
+alloc(newmem,2048)
+label(returnhere)
+label(originalcode)
+label(exit)
+
+newmem: //this is allocated memory, you have read,write,execute access
+//place your code here
+
+originalcode:
+nop 
+nop 
+mov ecx,[esi+00000168]
+
+exit:
+jmp returnhere
+
+"ps_login.exe"+11ABD:
+jmp newmem
+nop
+nop
+nop
+returnhere:
+
+
+ 
+ 
+[DISABLE]
+//code from here till the end of the code will be used to disable the cheat
+dealloc(newmem)
+"ps_login.exe"+11ABD:
+nop 
+nop 
+mov ecx,[esi+00000168]
+//Alt: db 90 90 8B 8E 68 01 00 00
+</AssemblerScript>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>23</ID>
+          <Description>"/adminopen fix"</Description>
+          <LastState/>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>[ENABLE]
+//code from here to '[DISABLE]' will be used to enable the cheat
+alloc(newmem,2048)
+label(returnhere)
+label(originalcode)
+label(exit)
+
+newmem: //this is allocated memory, you have read,write,execute access
+//place your code here
+
+originalcode:
+mov byte ptr [ps_login.exe+4E7BC],00
+
+exit:
+jmp returnhere
+
+"ps_login.exe"+5E1C:
+jmp newmem
+nop
+nop
+returnhere:
+
+
+ 
+ 
+[DISABLE]
+//code from here till the end of the code will be used to disable the cheat
+dealloc(newmem)
+"ps_login.exe"+5E1C:
+mov byte ptr [ps_login.exe+4E7BC],01
+//Alt: db C6 05 BC E7 44 00 01
+</AssemblerScript>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>0</ID>
+          <Description>"PS_Login crash fix"</Description>
+          <LastState/>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>// Author: Cups
+// Date: 31/10/2017
+[ENABLE]
+alloc(newmem, 128) // New memory cave used for performing the key length check
+label(return) // Address to return
+
+/* 404E60 is the CUserCrypto::KeyInit function. The keylen parameter describes the length of the decrypted
+AES key payload response from the client, which is the 2nd parameter to the function. Function parameters are stored
+in the EBP register, and are in reverse order. EBP+08 is the pointer to the second parameter (as all parameters are an
+integer, so 4 bytes in size) */
+ps_login.exe+4E84:
+jmp newmem // Jump to our new memory
+return:
+
+// New memory for checking the key length
+newmem:
+
+// We overwrote this code when inserting our jump
+push eax
+mov ebx,ecx
+mov eax,esi
+
+// If the key length is not 128 bytes, jump to the end of the function and do nothing
+cmp ecx,80
+jne ps_login.exe+4FAE
+
+// Key is valid, continue processing as normal
+jmp return
+
+[DISABLE]
+dealloc(newmem)
+
+ps_login.exe+4E84:
+push eax
+mov ebx,ecx
+mov eax,esi
+</AssemblerScript>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>28</ID>
+          <Description>"fix serverversion"</Description>
+          <LastState/>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>[ENABLE]
+00407407:
+db 90 90
+0040740C:
+db 90 90
+0040741B:
+db 90 90
+[DISABLE]
+00407407:
+je 00407424
+0040740C:
+je 00407424
+0040741B:
+je 00407424
+</AssemblerScript>
+        </CheatEntry>
+      </CheatEntries>
+    </CheatEntry>
+  </CheatEntries>
+  <UserdefinedSymbols/>
+</CheatTable>
